@@ -3,6 +3,7 @@ package com.venkata.org.model.remote
 import com.venkata.org.model.data.getProduct.GetProductResponse
 import com.venkata.org.model.data.login.LoginRequest
 import com.venkata.org.model.data.login.LoginResponse
+import com.venkata.org.model.data.productDetail.ProductDetailResponse
 import com.venkata.org.model.data.registration.RegistrationRequest
 import com.venkata.org.model.data.registration.RegistrationResponse
 import com.venkata.org.model.data.subCategory.SubCategoryResponse
@@ -43,6 +44,11 @@ interface ApiService {
     suspend fun getSubCategoryProductsById(
         @Path("sub_category_id")keyword: Int
     ): Response<SubCategoryProductResponse>
+
+    @GET("Product/details/{product_id}")
+    suspend fun getProductDetail(
+        @Path("product_id")keyword: Int
+    ): Response<ProductDetailResponse>
 
 
 }

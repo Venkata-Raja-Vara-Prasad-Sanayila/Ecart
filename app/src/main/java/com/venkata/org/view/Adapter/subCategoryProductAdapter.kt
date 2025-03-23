@@ -22,5 +22,18 @@ class SubCategoryProductAdapter(val subCategoryProducts: MutableList<SubCategory
     override fun onBindViewHolder(holder: SubCategoryProductViewHolder, position: Int) {
         val subCategoryProduct = subCategoryProducts[position]
         holder.bind(subCategoryProduct)
+        holder.itemView.setOnClickListener {
+            if (::onSelectItem.isInitialized) {
+                onSelectItem(subCategoryProduct, position)
+            }
+        }
     }
+
+
+
+    lateinit var onSelectItem:(SubCategoryProduct, Int)-> Unit
+    fun onClickSelectedItem(listener:(SubCategoryProduct, Int)->Unit){
+        onSelectItem = listener
+    }
+
 }

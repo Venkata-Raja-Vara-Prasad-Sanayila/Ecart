@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.venkata.org.Adapter.SubCategoryProductAdapter
+import com.venkata.org.R
 import com.venkata.org.databinding.FragmentSubCategoryViewsBinding
 import com.venkata.org.model.commons.ApiState
 import com.venkata.org.model.remote.ApiClient
@@ -49,6 +50,7 @@ class SubCategoryViewsFragment: Fragment() {
 
         initView()
 
+
         return binding.root
     }
 
@@ -57,6 +59,8 @@ class SubCategoryViewsFragment: Fragment() {
         intialiseViewModel()
 
         setupObserver()
+
+
     }
 
     override fun onResume() {
@@ -76,16 +80,36 @@ class SubCategoryViewsFragment: Fragment() {
     private fun setupObserver() {
         viewModel.apiStateSubCategoryProductsById.observe(viewLifecycleOwner) {
             when(it) {
-
-
                 is ApiState.Error -> Toast.makeText(context, "${it.message}", Toast.LENGTH_SHORT).show()
                 is ApiState.Success -> {
 
                     adapter = SubCategoryProductAdapter(it.data.subCategoryProducts)
                     binding.recycler.layoutManager = LinearLayoutManager(context)
                     binding.recycler.adapter = adapter
+                    adapter.onClickSelectedItem { subCategoryProduct, i ->
+
+
+                        val fragment = ProductDetailFragment()
+                        val bundle = Bundle()
+                        bundle.putInt("productId", it.data.subCategoryProducts[i].id)
+                        fragment.arguments = bundle
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.mainContainer, fragment)
+                            .addToBackStack("SubCategoryViews")
+                            .commit()
+
+                    }
 
                 }
+            }
+        }
+
+        viewModel.apiStateProductDetail.observe(viewLifecycleOwner){
+            when(it){
+                is ApiState.Error -> {
+
+                }
+                is ApiState.Success -> Log.d(SubCategoryViewsFragment::class.simpleName, "${it.data.product}")
             }
         }
     }

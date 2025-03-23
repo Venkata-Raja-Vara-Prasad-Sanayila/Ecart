@@ -21,11 +21,16 @@ import com.venkata.org.R
 import com.venkata.org.databinding.FragmentCategoryBinding
 import com.venkata.org.databinding.NavigationHeaderMenuBinding
 import com.venkata.org.model.commons.ApiState
+import com.venkata.org.model.localRepository.AppDatabase
+import com.venkata.org.model.localRepository.IRepository
+import com.venkata.org.model.localRepository.LocalRepository
 import com.venkata.org.model.remote.ApiClient
 import com.venkata.org.model.remote.ApiService
 import com.venkata.org.model.remote.Repository
 import com.venkata.org.model.sharedPreference.SharedPreferenceManager
 import com.venkata.org.view.SplashActivity
+import com.venkata.org.viewModel.LocalViewModel
+import com.venkata.org.viewModel.LocalViewModelFactory
 import com.venkata.org.viewModel.MainViewModel
 import com.venkata.org.viewModel.MainViewModelFactory
 
@@ -52,7 +57,6 @@ class CategoryFragment: Fragment(){
         initViewModel()
         viewModel.getProductCategories()
         setupObservers()
-
         binding.txtBtnLogout.setOnClickListener {
 //            SharedPreferenceManager.clearPreference()
 //            startActivity(Intent(context, SplashActivity::class.java))

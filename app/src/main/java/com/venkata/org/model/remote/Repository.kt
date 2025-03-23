@@ -27,4 +27,6 @@ class Repository(private val apiService: ApiService) {
 
     suspend fun getSubCategoryProductsById(keyword: Int) = apiService.getSubCategoryProductsById(keyword)
 
+    suspend fun getProductDetail(keyword: Int) = apiService.getProductDetail(keyword)
+
 }
