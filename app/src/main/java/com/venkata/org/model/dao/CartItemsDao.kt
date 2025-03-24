@@ -24,7 +24,8 @@ interface CartItemsDao {
     @Query("DELETE FROM cartitems WHERE product_id = :productId AND quantity <= 0")
     fun deleteIfZero(productId: Int)
 
-    @Query("SELECT QUANTITY FROM CARTITEMS WHERE product_id = :productId ")
+    @Query("SELECT IFNULL((SELECT quantity FROM cartitems WHERE product_id = :productId), 0)")
     fun getQuantityOfProduct(productId: Int): LiveData<Int>
+
 
 }

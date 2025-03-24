@@ -90,6 +90,10 @@ class ProductDetailFragment: Fragment() {
 
         val productID = arguments?.getInt("productId").toString().toInt()
         localViewModel.getQuantityOfProduct(productID).observe(viewLifecycleOwner){
+            if (it == 0){
+                binding.txtQuantityBlock.visibility = View.GONE
+                binding.txtCart.visibility = View.VISIBLE
+            }
             binding.txtQuantityNumber.text = it.toString()
         }
 
@@ -100,13 +104,11 @@ class ProductDetailFragment: Fragment() {
         with(binding){
             txtProductName.text = product.productName
             txtProductDescription.text = product.description
-            txtPrice.text = product.price.toString()
+            txtPrice.text = "$ ${product.price}"
             imgCarousel.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             imgCarousel.adapter = ImageCarouselViewPagerAdapter(product.images)
             recyclerSpecification.adapter = SpecificationAdapter(product.specifications)
         }
-
-
     }
 
     private fun initViewModel() {
