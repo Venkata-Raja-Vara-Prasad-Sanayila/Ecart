@@ -9,6 +9,7 @@ import com.venkata.org.model.commons.ApiState
 import com.venkata.org.model.data.getProduct.GetProductResponse
 import com.venkata.org.model.data.login.LoginRequest
 import com.venkata.org.model.data.login.LoginResponse
+import com.venkata.org.model.data.productDetail.ProductDetailResponse
 import com.venkata.org.model.data.registration.RegistrationRequest
 import com.venkata.org.model.data.registration.RegistrationResponse
 import com.venkata.org.model.remote.Repository
@@ -36,6 +37,9 @@ class MainViewModel(private val repo: Repository): ViewModel() {
     private val _apiStateSubCategoryProductsById = MutableLiveData<ApiState<SubCategoryProductResponse>>()
     val apiStateSubCategoryProductsById: LiveData<ApiState<SubCategoryProductResponse>> = _apiStateSubCategoryProductsById
 
+    private val _apiStateProductDetail = MutableLiveData<ApiState<ProductDetailResponse>>()
+    val apiStateProductDetail: LiveData<ApiState<ProductDetailResponse>> = _apiStateProductDetail
+
     fun getUserLogin(loginRequest: LoginRequest){
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -58,17 +62,6 @@ class MainViewModel(private val repo: Repository): ViewModel() {
 
                 if (result.status == 0){
                     _apiStateLoginUser.postValue(ApiState.Success(result))
-
-//                    Toast.makeText(
-//                        context,
-//                        result.message,
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                    result.user?.let {
-//                        SharedPreferenceManager.saveBoolean(SharedPreferenceManager.KEY_IS_LOGGED_IN, true)
-//                        SharedPreferenceManager.saveUser(SharedPreferenceManager.KEY_USER, it) }
-//
-//                    startActivity(Intent(context, MainActivity::class.java))
 
                 }
                 else{
@@ -111,12 +104,6 @@ class MainViewModel(private val repo: Repository): ViewModel() {
 
                 if (result.status == 0) {
                     _apiStateUserRegistration.postValue(ApiState.Success(result))
-
-
-//                    requireActivity().supportFragmentManager.beginTransaction()
-//                        .replace(R.id.myContainer, LoginFragment()).addToBackStack("Register")
-//                        .commit()
-
 
                 }
                 else{
@@ -241,6 +228,41 @@ class MainViewModel(private val repo: Repository): ViewModel() {
         }
 
 
+    }
+
+
+    //===============================================================
+    fun getProductDetail(productId: Int){
+
+        try {
+
+
+            viewModelScope.launch(Dispatchers.IO) {
+
+                val response = repo.getProductDetail(productId)
+                if (!response.isSuccessful) {
+                    _apiStateProductDetail.postValue(ApiState.Error("Failed to get Response from the Server"))
+                    return@launch
+                }
+
+                val result = response.body()
+                if (result == null) {
+                    _apiStateProductDetail.postValue(ApiState.Error("Empty Response from the server. Please retry."))
+                    return@launch
+                }
+
+                if (result.status == 0) {
+                    _apiStateProductDetail.postValue(ApiState.Success(result))
+                } else {
+                    _apiStateProductDetail.postValue(ApiState.Error(result.message))
+                }
+
+
+            }
+        }
+        catch (e: Exception){
+            _apiStateProductDetail.postValue(ApiState.Error("Error e: $e"))
+        }
     }
 
 

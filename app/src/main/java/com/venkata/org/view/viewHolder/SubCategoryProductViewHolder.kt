@@ -12,7 +12,7 @@ class SubCategoryProductViewHolder(val binding: ViewHolderProductBinding): ViewH
         with(binding){
             txtName.text = subCategoryProduct.name
             txtDescription.text = subCategoryProduct.description
-            txtPrice.text = subCategoryProduct.price.toString()
+            txtPrice.text = "$ ${subCategoryProduct.price}"
             val url = "https://apolisrises.co.in/myshop/images/samsung_21_plus.png"//${subCategoryProduct.imageUrl}"
             Picasso.get().load(url).into(binding.imgImageUrl)
         }
