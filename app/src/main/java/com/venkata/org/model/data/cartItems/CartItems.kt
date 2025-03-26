@@ -16,6 +16,16 @@ data class CartItem(
     val quantity: Int,
 
     @ColumnInfo(name = "unit_price")
-    val unitPrice: Int
+    val unitPrice: Int,
+
+    @ColumnInfo(name = "product_name")
+    val productName: String,
+
+    @ColumnInfo(name = "description")
+    val description:String,
+
+    @ColumnInfo(name = "product_image_url")
+    val imageUrl: String
+
 
 )

@@ -1,11 +1,14 @@
 package com.venkata.org.model.remote
 
+import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressRequest
+import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressResponse
 import com.venkata.org.model.data.getProduct.GetProductResponse
 import com.venkata.org.model.data.login.LoginRequest
 import com.venkata.org.model.data.login.LoginResponse
 import com.venkata.org.model.data.productDetail.ProductDetailResponse
 import com.venkata.org.model.data.registration.RegistrationRequest
 import com.venkata.org.model.data.registration.RegistrationResponse
+import com.venkata.org.model.data.searchProduct.SearchProductResponse
 import com.venkata.org.model.data.subCategory.SubCategoryResponse
 import com.venkata.org.model.data.subCategoryProducts.SubCategoryProductResponse
 import retrofit2.Call
@@ -49,6 +52,17 @@ interface ApiService {
     suspend fun getProductDetail(
         @Path("product_id")keyword: Int
     ): Response<ProductDetailResponse>
+
+    @GET("Product/search")
+    suspend fun searchProducts(
+        @Query("query")keyword: String
+    ): Response<SubCategoryProductResponse>//<SearchProductResponse>
+
+    @POST("User/address")
+    @Headers("Content-type: application/json")
+    suspend fun addDeliveryAddress(
+        @Body addAddressRequest: AddDeliveryAddressRequest
+    ): Response<AddDeliveryAddressResponse>
 
 
 }
