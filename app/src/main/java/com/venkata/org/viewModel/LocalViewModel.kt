@@ -17,6 +17,10 @@ class LocalViewModel(private val repo: IRepository): ViewModel() {
         repo.addCartItem(cartItem)
     }
 
+    fun getAllCartItems(){
+        repo.getAllCartItems()
+    }
+
     fun increaseQuantity(productID: Int){
         repo.increaseQuantity(productID)
     }

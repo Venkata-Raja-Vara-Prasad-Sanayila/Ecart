@@ -79,7 +79,7 @@ class ProductDetailFragment: Fragment() {
                 }
                 is ApiState.Success -> {
                     val product = it.data.product
-                    cartItem = CartItem(product.productId, 0, product.price)
+                    cartItem = CartItem(product.productId, 0, product.price, product.productName, product.description, product.productImageUrl)
                     Log.d(ProductDetailFragment::class.simpleName, "$product")
                     bindView(product)
 

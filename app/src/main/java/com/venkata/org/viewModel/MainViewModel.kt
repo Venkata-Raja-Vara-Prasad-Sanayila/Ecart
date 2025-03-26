@@ -6,18 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.venkata.org.model.commons.ApiState
+import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressRequest
+import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressResponse
 import com.venkata.org.model.data.getProduct.GetProductResponse
 import com.venkata.org.model.data.login.LoginRequest
 import com.venkata.org.model.data.login.LoginResponse
 import com.venkata.org.model.data.productDetail.ProductDetailResponse
 import com.venkata.org.model.data.registration.RegistrationRequest
 import com.venkata.org.model.data.registration.RegistrationResponse
+import com.venkata.org.model.data.searchProduct.SearchProductResponse
 import com.venkata.org.model.remote.Repository
 import com.venkata.org.model.data.subCategory.SubCategoryResponse
 import com.venkata.org.model.data.subCategoryProducts.SubCategoryProductResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import retrofit2.http.Query
 
 class MainViewModel(private val repo: Repository): ViewModel() {
 
@@ -39,6 +43,12 @@ class MainViewModel(private val repo: Repository): ViewModel() {
 
     private val _apiStateProductDetail = MutableLiveData<ApiState<ProductDetailResponse>>()
     val apiStateProductDetail: LiveData<ApiState<ProductDetailResponse>> = _apiStateProductDetail
+
+    private val _apiStateSearchProducts = MutableLiveData<ApiState<SubCategoryProductResponse>>()
+    val apiStateSearchProducts: LiveData<ApiState<SubCategoryProductResponse>> = _apiStateSearchProducts
+
+    private val _apiStateAddAddress = MutableLiveData<ApiState<AddDeliveryAddressResponse>>()
+    val apiStateAddAddress: LiveData<ApiState<AddDeliveryAddressResponse>> = _apiStateAddAddress
 
     fun getUserLogin(loginRequest: LoginRequest){
 
@@ -262,6 +272,80 @@ class MainViewModel(private val repo: Repository): ViewModel() {
         }
         catch (e: Exception){
             _apiStateProductDetail.postValue(ApiState.Error("Error e: $e"))
+        }
+    }
+
+    //===============================================================
+
+    fun getSearchProducts(queryParam: String){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try {
+
+                val response: Response<SubCategoryProductResponse> = repo.searchProducts(queryParam)
+
+                if (!response.isSuccessful){
+                    _apiStateSearchProducts.postValue(ApiState.Error("Failed to get Search Products"))
+                    return@launch
+                }
+
+                val result = response.body()
+                if (result == null){
+                    _apiStateSearchProducts.postValue(ApiState.Error("Empty Response from the server. Please retry."))
+                    return@launch
+                }
+
+                if (result.status == 0){
+                    _apiStateSearchProducts.postValue(ApiState.Success(result))
+                }
+                else{
+                    _apiStateSearchProducts.postValue(ApiState.Error(result.message))
+                }
+            }
+            catch (e: Exception){
+                _apiStateSearchProducts.postValue(ApiState.Error("Error is e: $e"))
+            }
+
+        }
+
+
+
+    }
+
+
+    //===================================================================
+
+    fun addDeliveryAddress(address: AddDeliveryAddressRequest){
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try {
+
+                val response: Response<AddDeliveryAddressResponse> = repo.addDeliveryAddress(address)
+
+                if (!response.isSuccessful){
+                    _apiStateAddAddress.postValue(ApiState.Error("Failed to Add Address"))
+                    return@launch
+                }
+
+                val result = response.body()
+                if (result == null){
+                    _apiStateAddAddress.postValue(ApiState.Error("Empty Response from the server. Please retry."))
+                    return@launch
+                }
+
+                if (result.status == 0){
+                    _apiStateAddAddress.postValue(ApiState.Success(result))
+                }
+                else{
+                    _apiStateAddAddress.postValue(ApiState.Error(result.message))
+                }
+            }
+            catch (e: Exception){
+                _apiStateAddAddress.postValue(ApiState.Error("Error is e: $e"))
+            }
+
+
         }
     }
 
