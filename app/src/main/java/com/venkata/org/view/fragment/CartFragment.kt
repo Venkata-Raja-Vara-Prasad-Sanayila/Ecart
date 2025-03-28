@@ -53,6 +53,16 @@ class CartFragment: Fragment() {
             binding.recyclerCart.adapter = adapter
 
         }
+
+        localViewModel.totalPrice.observe(viewLifecycleOwner){
+
+            //if(it>0){
+                binding.txtTotalPriceCartItems.text = it.toString()
+//            }
+//            else{
+//                binding.txtTotalPriceCartItems.text = ""
+//            }
+        }
     }
 
     private fun initDb() {

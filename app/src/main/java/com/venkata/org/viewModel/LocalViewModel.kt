@@ -1,17 +1,25 @@
 package com.venkata.org.viewModel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import com.venkata.org.model.data.cartItems.CartItem
+import com.venkata.org.model.data.getDeliveryAddress.Address
 import com.venkata.org.model.localRepository.IRepository
 
 class LocalViewModel(private val repo: IRepository): ViewModel() {
 
 
+
     val error: LiveData<String> = repo.error
 
     val cartItems: LiveData<List<CartItem>> = repo.cartItems
+
+    val totalPrice: LiveData<Double> = cartItems.map { item ->
+        item?.sumOf { it.quantity * it.unitPrice }?.toDouble() ?: 0.0
+    }
 
     fun addCartItem(cartItem: CartItem){
         repo.addCartItem(cartItem)

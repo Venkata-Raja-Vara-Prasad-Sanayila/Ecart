@@ -1,21 +1,128 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Payment Fragment"
-        tools:text="Payment Fragment"
-        android:textSize="28sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/txtSelectPaymentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Select Payment Option"
+            android:textSize="18sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearCOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingRight="16dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/shape_payment_option">
+
+                <TextView
+                    android:id="@+id/txtCOD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cash on Delivery"
+                    android:layout_weight="1"
+                    android:paddingLeft="16dp" />
+
+                <RadioButton
+                    android:id="@+id/radioCOD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearIB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingRight="16dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/shape_payment_option">
+
+                <TextView
+                    android:id="@+id/txtIB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Internet Banking"
+                    android:layout_weight="1"
+                    android:paddingLeft="16dp" />
+
+                <RadioButton
+                    android:id="@+id/radioIB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearDCCC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingRight="16dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/shape_payment_option">
+
+                <TextView
+                    android:id="@+id/txtDCCC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Debit Card / Credit Card"
+                    android:layout_weight="1"
+                    android:paddingLeft="16dp" />
+
+                <RadioButton
+                    android:id="@+id/radioDCCC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearPP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingRight="16dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/shape_payment_option">
+
+                <TextView
+                    android:id="@+id/txtPP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pay Pal"
+                    android:layout_weight="1"
+                    android:paddingLeft="16dp" />
+
+                <RadioButton
+                    android:id="@+id/radioPP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnNextPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:layout_gravity="center" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
