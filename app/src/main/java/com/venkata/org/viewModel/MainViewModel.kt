@@ -8,9 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.venkata.org.model.commons.ApiState
 import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressRequest
 import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressResponse
+import com.venkata.org.model.data.getDeliveryAddress.Address
+import com.venkata.org.model.data.getDeliveryAddress.GetDeliveryAddressResponse
 import com.venkata.org.model.data.getProduct.GetProductResponse
 import com.venkata.org.model.data.login.LoginRequest
 import com.venkata.org.model.data.login.LoginResponse
+import com.venkata.org.model.data.place_order.PlaceOrder
+import com.venkata.org.model.data.place_order.PlaceOrderResponse
 import com.venkata.org.model.data.productDetail.ProductDetailResponse
 import com.venkata.org.model.data.registration.RegistrationRequest
 import com.venkata.org.model.data.registration.RegistrationResponse
@@ -24,6 +28,11 @@ import retrofit2.Response
 import retrofit2.http.Query
 
 class MainViewModel(private val repo: Repository): ViewModel() {
+
+
+    val selectedShippingAddress = MutableLiveData<Address>()
+
+    val selectedPaymentMode = MutableLiveData<String>()
 
     private val _apiStateLoginUser = MutableLiveData<ApiState<LoginResponse>>()
     val apiStateLoginUser: LiveData<ApiState<LoginResponse>> = _apiStateLoginUser
@@ -49,6 +58,15 @@ class MainViewModel(private val repo: Repository): ViewModel() {
 
     private val _apiStateAddAddress = MutableLiveData<ApiState<AddDeliveryAddressResponse>>()
     val apiStateAddAddress: LiveData<ApiState<AddDeliveryAddressResponse>> = _apiStateAddAddress
+
+    private val _apiStateGetAddress = MutableLiveData<ApiState<GetDeliveryAddressResponse>>()
+    val apiStateGetAddress: LiveData<ApiState<GetDeliveryAddressResponse>> = _apiStateGetAddress
+
+
+    private val _apiStatePlaceOrder = MutableLiveData<ApiState<PlaceOrderResponse>>()
+    val apiStatePlaceOrder: LiveData<ApiState<PlaceOrderResponse>> = _apiStatePlaceOrder
+
+
 
     fun getUserLogin(loginRequest: LoginRequest){
 
@@ -343,6 +361,76 @@ class MainViewModel(private val repo: Repository): ViewModel() {
             }
             catch (e: Exception){
                 _apiStateAddAddress.postValue(ApiState.Error("Error is e: $e"))
+            }
+
+
+        }
+    }
+
+
+
+    //===================================================================
+    fun getAddresses(userId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try {
+
+                val response: Response<GetDeliveryAddressResponse> = repo.getDeliveryAddresses(userId)
+
+                if (!response.isSuccessful){
+                    _apiStateGetAddress.postValue(ApiState.Error("Failed to Get delivery Addresses"))
+                    return@launch
+                }
+
+                val result = response.body()
+                if (result == null){
+                    _apiStateGetAddress.postValue(ApiState.Error("Empty Response from the server. Please retry."))
+                    return@launch
+                }
+
+                if (result.status == 0){
+                    _apiStateGetAddress.postValue(ApiState.Success(result))
+                }
+                else{
+                    _apiStateGetAddress.postValue(ApiState.Error(result.message))
+                }
+            }
+            catch (e: Exception){
+                _apiStateGetAddress.postValue(ApiState.Error("Error is e: $e"))
+            }
+
+
+        }
+    }
+
+    //=====================================================================
+    fun placeFinalOrder(placeOrder: PlaceOrder){
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try {
+
+                val response: Response<PlaceOrderResponse> = repo.postPlaceOrder(placeOrder)
+
+                if (!response.isSuccessful){
+                    _apiStatePlaceOrder.postValue(ApiState.Error("Failed to place the order"))
+                    return@launch
+                }
+
+                val result = response.body()
+                if (result == null){
+                    _apiStatePlaceOrder.postValue(ApiState.Error("Empty Response from the server. Please retry."))
+                    return@launch
+                }
+
+                if (result.status == 0){
+                    _apiStatePlaceOrder.postValue(ApiState.Success(result))
+                }
+                else{
+                    _apiStatePlaceOrder.postValue(ApiState.Error(result.message))
+                }
+            }
+            catch (e: Exception){
+                _apiStatePlaceOrder.postValue(ApiState.Error("Error is e: $e"))
             }
 
 

@@ -2,9 +2,12 @@ package com.venkata.org.model.remote
 
 import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressRequest
 import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressResponse
+import com.venkata.org.model.data.getDeliveryAddress.GetDeliveryAddressResponse
 import com.venkata.org.model.data.getProduct.GetProductResponse
 import com.venkata.org.model.data.login.LoginRequest
 import com.venkata.org.model.data.login.LoginResponse
+import com.venkata.org.model.data.place_order.PlaceOrder
+import com.venkata.org.model.data.place_order.PlaceOrderResponse
 import com.venkata.org.model.data.registration.RegistrationRequest
 import com.venkata.org.model.data.registration.RegistrationResponse
 import com.venkata.org.model.data.searchProduct.SearchProductResponse
@@ -35,5 +38,9 @@ class Repository(private val apiService: ApiService) {
     suspend fun searchProducts(keyword: String) = apiService.searchProducts(keyword)
 
     suspend fun addDeliveryAddress(address: AddDeliveryAddressRequest) = apiService.addDeliveryAddress(address)
+
+    suspend fun getDeliveryAddresses( userId: Int) = apiService.getDeliveryAddresses(userId)
+
+    suspend fun postPlaceOrder( placeOrder: PlaceOrder) = apiService.postPlaceOrder(placeOrder)
 
 }

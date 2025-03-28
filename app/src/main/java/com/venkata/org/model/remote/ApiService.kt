@@ -2,9 +2,12 @@ package com.venkata.org.model.remote
 
 import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressRequest
 import com.venkata.org.model.data.deliveryAddress.AddDeliveryAddressResponse
+import com.venkata.org.model.data.getDeliveryAddress.GetDeliveryAddressResponse
 import com.venkata.org.model.data.getProduct.GetProductResponse
 import com.venkata.org.model.data.login.LoginRequest
 import com.venkata.org.model.data.login.LoginResponse
+import com.venkata.org.model.data.place_order.PlaceOrder
+import com.venkata.org.model.data.place_order.PlaceOrderResponse
 import com.venkata.org.model.data.productDetail.ProductDetailResponse
 import com.venkata.org.model.data.registration.RegistrationRequest
 import com.venkata.org.model.data.registration.RegistrationResponse
@@ -63,6 +66,17 @@ interface ApiService {
     suspend fun addDeliveryAddress(
         @Body addAddressRequest: AddDeliveryAddressRequest
     ): Response<AddDeliveryAddressResponse>
+
+
+    @GET("User/addresses/{user_id}")
+    suspend fun getDeliveryAddresses(
+        @Path("user_id") userId: Int
+    ): Response<GetDeliveryAddressResponse>
+
+    @POST("Order")
+    suspend fun postPlaceOrder(
+        @Body placeOrder: PlaceOrder
+    ): Response<PlaceOrderResponse>
 
 
 }
